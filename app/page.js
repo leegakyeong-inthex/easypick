@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Sheet } from "react-modal-sheet";
@@ -67,8 +67,34 @@ const keywords = [
   '#가족들과 외식',
 ]
 
+const cardTypes = ['적립형', '할인형', '추천 카드 포함']
+
+const cards = [
+  {
+    name: "신한카드 청춘대로 톡톡카드",
+    spot: "CU 서울숲점",
+    description: "대형마트 10%할인",
+    image: "/images/shinhan-1.png",
+  },
+  {
+    name: "신한카드 청춘대로 톡톡카드",
+    spot: "이마트 왕십리점",
+    description: "대형마트 10%할인",
+    image: "/images/shinhan-2.png",
+  },
+  {
+    name: "신한카드 청춘대로 톡톡카드",
+    spot: "홈플러스 익스프레스 왕십리점",
+    description: "대형마트 10%할인",
+    image: "/images/shinhan-3.png",
+  },
+]
+
 export default function Home() {
   const [isOpen, setIsOpen] = useState(false)
+  const [selectedPlace, setSelectedPlace] = useState('')
+  const ref = useRef(null);
+  const snapTo = (i) => ref.current.snapTo(i);
 
   useEffect(() => {
     setIsOpen(true)
@@ -88,11 +114,12 @@ export default function Home() {
 
       <Sheet
         // unstyled
+        ref={ref}
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
         snapPoints={[0, 150, 550, 1]}
         detent="content"
-        initialSnap={1}
+        initialSnap={2}
         className={styles.bottomSheet}
         disableDismiss
       >
@@ -103,13 +130,59 @@ export default function Home() {
               <div className="font-semibold text-lg tracking-[-2%] mb-4 pl-5">장소 맞춤 카드찾기</div>
               <div className="flex items-center space-x-4 overflow-x-scroll mb-5 pl-5">
                 {places.map((place) => (
-                  <div key={place.name} className="flex flex-col items-center shrink-0">
+                  <div
+                    key={place.name}
+                    className="flex flex-col items-center shrink-0"
+                    onClick={() => {
+                      if (selectedPlace) {
+                        setSelectedPlace('')
+                        snapTo(2)
+                      } else {
+                        setSelectedPlace(place.name)
+                        snapTo(3)
+                      }
+                    }}
+                  >
                     <Image src={place.iconUrl} width={52} height={52} alt={place.name} className="block mb-[5px]" />
                     <div className="font-medium text-sm">{place.name}</div>
                   </div>
                 ))}
               </div>
               <hr className="border border-[#F4F4F4] mb-5" />
+              {places.find((p) => p.name === selectedPlace) && (
+                <div>
+                  <div className="flex items-center space-x-3 mb-1 px-5">
+                    <div className="bg-[#F7F8F8] p-[9px] h-10 text-[15px] text-[#5A5B64] shrink-0 rounded-full">
+                      <Image src="/images/icons/tune.png" width="20" height="20" alt="필터" />
+                    </div>
+                    <div className="flex items-center space-x-1.5">
+                      {cardTypes.map((type) => (
+                        <div key={type} className="bg-[#F7F8F8] px-3.5 py-2.5 h-10 text-[15px] text-[#5A5B64] shrink-0 rounded-full">{type}</div>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="divide-y divide-solid divide-[F4F4F4]">
+                    {cards.map((card) => (
+                      <div key={card.spot} className="py-4 px-5">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center">
+                            <Image src={card.image} width={49} height={78} alt={card.name} className="mr-5" />
+                            <div>
+                              <div className="flex items-center space-x-0.5">
+                                <div className="font-medium text-[#6D727A] text-[13px]">{card.name}</div>
+                                <Image src="/images/chevron_right.png" width="20" height="20" alt="이동하기" />
+                              </div>
+                              <div className="text-base font-semibold">{card.spot}</div>
+                              <div className="text-[13px] text-[#6D727A]">{card.description}</div>
+                            </div>
+                          </div>
+                          <div className="bg-[#CCE1FF] px-[7px] py-[5px] text-[#0068FF] text-[11px] font-semibold rounded-[20px]">MY</div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
               <div className="font-semibold text-lg tracking-[-2%] mb-4 pl-5">추천 장소 키워드</div>
               <div className="flex items-center space-x-1.5 overflow-x-scroll pl-5 mb-4">
                 {keywords.map((keyword) => (
