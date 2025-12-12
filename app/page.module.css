@@ -2,3 +2,14 @@
   position: absolute !important;
   z-index: 0 !important;
 }
+
+.selectedBenefit {
+  background-color: white;
+  color: #070707;
+  box-shadow: 0px 0px 24px 0px rgba(0, 0, 0, 0.16);
+}
+
+.unselectedBenefit {
+  background-color: transparent;
+  color: #878787;
+}
