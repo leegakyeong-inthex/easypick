@@ -110,11 +110,47 @@ const ownedCards = [
   },
 ]
 
+const cardBenefits = [
+  {
+    category: "영화",
+    condition: "CGV, 롯데시네마 1만원 이상 결제 시 ",
+    benefit: "회당 5,000원 할인",
+    spots: [
+      {
+        image: "/images/mcdonalds.png",
+        name: "CGV 건대입구",
+        benefit: "1만원 이상 결제 시 회당 5000원 할인",
+        distance: "115m",
+      }
+    ]
+  },
+  {
+    category: "식당",
+    condition: "버거/패스트푸드 업종  ",
+    benefit: "20% 청구",
+    spots: [
+      {
+        image: "/images/mcdonalds.png",
+        name: "맥도날드 건대입구",
+        benefit: "1만원 이상 결제 시20% 청구 할인",
+        distance: "115m",
+      },
+      {
+        image: "/images/mcdonalds.png",
+        name: "맥도날드 건대입구",
+        benefit: "1만원 이상 결제 시20% 청구 할인",
+        distance: "115m",
+      },
+    ]
+  }
+]
+
 export default function Home() {
   const [selectedBenefit, setselectedBenefit] = useState('card') // place or card
   const [isOpen, setIsOpen] = useState(false)
   const [selectedPlace, setSelectedPlace] = useState('')
   const [selectedSpot, setSelectedSpot] = useState('')
+  const [selectedCard, setSelectedCard] = useState('')
   const ref = useRef(null);
   const snapTo = (i) => ref.current.snapTo(i);
 
@@ -322,7 +358,13 @@ export default function Home() {
                   <div className="ml-5 font-medium text-[15px] text-[#6D727A]">총 4개</div>
                   <div className="divide-y divide-solid divide-[F4F4F4]">
                     {ownedCards.map((card, i) => (
-                      <div key={card.name+i} className="flex items-center py-[8.5px] pl-[13px] pr-[18px]">
+                      <div
+                        key={card.name+i}
+                        className="flex items-center py-[8.5px] pl-[13px] pr-[18px]"
+                        onClick={() => {
+                          setSelectedCard(card.name)
+                        }}
+                      >
                         <Image src={card.image} width={49} height={78} alt={card.name} className="mr-5" />
                         <div className="flex-1">
                           <div className="font-medium text-[#6D727A] text-[13px]">{card.name}</div>
@@ -333,6 +375,50 @@ export default function Home() {
                     ))}
                   </div>
                 </div>
+
+                {/* 카드 선택 시 */}
+                {selectedCard && (
+                  <div className="absolute top-0 bg-white w-full">
+                    <div className="px-[18px] flex items-center mb-[7px]">
+                      <Image
+                        src="/images/icons/arrow-left.png"
+                        width={24}
+                        height={24}
+                        alt="뒤로가기"
+                        onClick={() => {
+                          setSelectedCard('')
+                          // snapTo(3)
+                        }}
+                      />
+                      <div className="ml-[5px] text-lg font-semibold">{selectedCard}</div>
+                      <div className="ml-auto rounded-full px-3 py-[7px] border border-[#EBEBEB] text-[#5A5B64] text-[13px] font-semibold">카드 상세</div>
+                    </div>
+                    <div className="divide-y divide-solid divide-[F4F4F4]">
+                      {cardBenefits.map((benefit) => (
+                        <div key={benefit.category} className="mt-[27px]">
+                          <div className="flex items-start px-[18px] mb-[22px]">
+                            <div className="bg-[#F3F3F3] rounded-full px-[9px] py-[5px] font-semibold text-[15px]">{benefit.category}</div>
+                            <div className="ml-[31px]">
+                              <div className="text-[13px] text-[#6D727A] font-medium">{benefit.condition}</div>
+                              <div className="text-base font-semibold">{benefit.benefit}</div>
+                            </div>
+                          </div>
+                          <div className="mx-[18px] bg-[#0B0D0F] flex items-center justify-center text-white py-3 rounded-[10px] h-10 mb-3">더 나은 혜택 카드 보기</div>
+                          {benefit.spots.map((spot, i) => (
+                            <div key={spot.name+i} className="flex items-center mx-[18px] rounded-[13px] bg-[#F8F8F8] border border-[#F4F4F4] px-2 py-3.5 mb-[7px] last:mb-[30px]">
+                              <Image src={spot.image} width={34} height={34} alt="" />
+                              <div className="flex-1 ml-[11px]">
+                                <div className="font-semibold text-[13px]">{spot.name}</div>
+                                <div className="font-medium text-[13px] text-[#6D727A]">{spot.benefit}</div>
+                              </div>
+                              <div className="bg-white border border-[#EBEBEB] rounded-full px-2 py-1 font-medium text-[13px] text-[#5A5B64]">{spot.distance}</div>
+                            </div>
+                          ))}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </>
             )}
           </Sheet.Content>
