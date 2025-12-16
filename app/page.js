@@ -113,7 +113,7 @@ const ownedCards = [
 const cardBenefits = [
   {
     category: "영화",
-    condition: "CGV, 롯데시네마 1만원 이상 결제 시 ",
+    condition: "CGV, 롯데시네마 1만원 이상 결제 시",
     benefit: "회당 5,000원 할인",
     spots: [
       {
@@ -126,7 +126,7 @@ const cardBenefits = [
   },
   {
     category: "식당",
-    condition: "버거/패스트푸드 업종  ",
+    condition: "버거/패스트푸드 업종",
     benefit: "20% 청구",
     spots: [
       {
@@ -146,7 +146,7 @@ const cardBenefits = [
 ]
 
 export default function Home() {
-  const [selectedBenefit, setselectedBenefit] = useState('card') // place or card
+  const [selectedBenefit, setselectedBenefit] = useState('place') // place or card
   const [isOpen, setIsOpen] = useState(false)
   const [selectedPlace, setSelectedPlace] = useState('')
   const [selectedSpot, setSelectedSpot] = useState('')
@@ -157,6 +157,14 @@ export default function Home() {
   useEffect(() => {
     setIsOpen(true)
   }, [])
+
+  // useEffect(() => {
+  //   if (selectedBenefit === 'place') {
+  //     snapTo(2)
+  //   } else {
+  //     snapTo(3)
+  //   }
+  // }, [selectedBenefit])
 
   return (
     <>
@@ -186,7 +194,7 @@ export default function Home() {
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
         snapPoints={[0, 150, 500, 1]}
-        detent="content"
+        // detent="content"
         initialSnap={2}
         className={styles.bottomSheet}
         disableDismiss
