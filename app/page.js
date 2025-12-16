@@ -188,7 +188,7 @@ export default function Home() {
         </Link>
       </div>
 
-      <Sheet
+      {/* <Sheet
         // unstyled
         ref={ref}
         isOpen={isOpen}
@@ -278,7 +278,6 @@ export default function Home() {
                   <Image src="/images/event-banner.png" width={375} height={300} alt="이벤트 배너" />
                 </div>
 
-                {/* 장소 선택 시 */}
                 {selectedSpot && (
                   <div className="absolute top-0 bg-white w-full">
                     <div className="px-[18px] flex items-center justify-between mb-4">
@@ -384,7 +383,6 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* 카드 선택 시 */}
                 {selectedCard && (
                   <div className="absolute top-0 bg-white w-full">
                     <div className="px-[18px] flex items-center mb-[7px]">
@@ -431,8 +429,8 @@ export default function Home() {
             )}
           </Sheet.Content>
         </Sheet.Container>
-        {/* <Sheet.Backdrop style={{ zIndex: 500 }} /> */}
-      </Sheet>
+        // <Sheet.Backdrop style={{ zIndex: 500 }} />
+      </Sheet> */}
     </>
   )
 }
