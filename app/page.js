@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Sheet } from "react-modal-sheet";
+import CardRegistration from "@/components/pages/CardRegistration";
 import styles from "./page.module.css";
 
 const places = [
@@ -154,6 +155,7 @@ export default function Home() {
   const [selectedPlace, setSelectedPlace] = useState('')
   const [selectedSpot, setSelectedSpot] = useState('')
   const [selectedCard, setSelectedCard] = useState('')
+  const [isCardRegistrationVisible, setIsCardRegistrationVisible] = useState(false)
   const ref = useRef(null);
   const snapTo = (i) => ref.current.snapTo(i);
 
@@ -275,28 +277,14 @@ export default function Home() {
                       </div>
                     </div>
                   )}
-                  {!isLoggedIn && places.find((p) => p.name === selectedPlace) && (
-                    <Sheet
-                      isOpen={isLoginSheetOpen}
-                      onClose={() => setIsLoginSheetOpen(false)}
-                      snapPoints={[0, 200, 1]}
-                      // detent="content"
-                      initialSnap={1}
-                    >
-                      <Sheet.Container>
-                        <Sheet.Header />
-                        <Sheet.Content>
-                          <div>로그인하고 내 소비패턴에 맞는 카드 혜택과 이벤트를 확인해보세요.</div>
-                          <Button>로그인하고 확인하기</Button>
-                        </Sheet.Content>
-                      </Sheet.Container>
-                      <Sheet.Backdrop />
-                    </Sheet>
-                  )}
                   {!isLoggedIn && (
                     <div className="flex items-center">
                       <div>카드 등록하고<br />슬기로운 소비생활 시작하기</div>
-                      <div>카드 등록하기</div>
+                      <div
+                        onClick={() => {
+                          setIsCardRegistrationVisible(true)
+                        }}
+                      >카드 등록하기</div>
                     </div>
                   )}
                   <div className="font-semibold text-lg tracking-[-2%] mb-4 pl-5">추천 장소 키워드</div>
@@ -462,6 +450,27 @@ export default function Home() {
         </Sheet.Container>
         {/* <Sheet.Backdrop style={{ zIndex: 500 }} /> */}
       </Sheet>
+
+      {!isLoggedIn && places.find((p) => p.name === selectedPlace) && (
+        <Sheet
+          isOpen={isLoginSheetOpen}
+          onClose={() => setIsLoginSheetOpen(false)}
+          snapPoints={[0, 200, 1]}
+          // detent="content"
+          initialSnap={1}
+        >
+          <Sheet.Container>
+            <Sheet.Header />
+            <Sheet.Content>
+              <div>로그인하고 내 소비패턴에 맞는 카드 혜택과 이벤트를 확인해보세요.</div>
+              <Button>로그인하고 확인하기</Button>
+            </Sheet.Content>
+          </Sheet.Container>
+          <Sheet.Backdrop />
+        </Sheet>
+      )}
+
+      {isCardRegistrationVisible && <CardRegistration setIsVisible={setIsCardRegistrationVisible} />}
     </>
   )
 }
