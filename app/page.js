@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import { Sheet } from "react-modal-sheet";
 import styles from "./page.module.css";
 
@@ -146,8 +147,10 @@ const cardBenefits = [
 ]
 
 export default function Home() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [selectedBenefit, setselectedBenefit] = useState('place') // place or card
   const [isOpen, setIsOpen] = useState(false)
+  const [isLoginSheetOpen, setIsLoginSheetOpen] = useState(false)
   const [selectedPlace, setSelectedPlace] = useState('')
   const [selectedSpot, setSelectedSpot] = useState('')
   const [selectedCard, setSelectedCard] = useState('')
@@ -212,6 +215,10 @@ export default function Home() {
                         key={place.name}
                         className="flex flex-col items-center shrink-0"
                         onClick={() => {
+                          if (!isLoggedIn) {
+                            setIsLoginSheetOpen(!isLoginSheetOpen)
+                          }
+
                           if (selectedPlace && selectedPlace === place.name) {
                             setSelectedPlace('')
                             snapTo(2)
@@ -227,7 +234,7 @@ export default function Home() {
                     ))}
                   </div>
                   <hr className="border border-[#F4F4F4] mb-5" />
-                  {places.find((p) => p.name === selectedPlace) && (
+                  {isLoggedIn && places.find((p) => p.name === selectedPlace) && (
                     <div>
                       <div className="flex items-center space-x-3 mb-1 px-5">
                         <div className="bg-[#F7F8F8] p-[9px] h-10 text-[15px] text-[#5A5B64] shrink-0 rounded-full">
@@ -266,6 +273,30 @@ export default function Home() {
                           </div>
                         ))}
                       </div>
+                    </div>
+                  )}
+                  {!isLoggedIn && places.find((p) => p.name === selectedPlace) && (
+                    <Sheet
+                      isOpen={isLoginSheetOpen}
+                      onClose={() => setIsLoginSheetOpen(false)}
+                      snapPoints={[0, 200, 1]}
+                      // detent="content"
+                      initialSnap={1}
+                    >
+                      <Sheet.Container>
+                        <Sheet.Header />
+                        <Sheet.Content>
+                          <div>로그인하고 내 소비패턴에 맞는 카드 혜택과 이벤트를 확인해보세요.</div>
+                          <Button>로그인하고 확인하기</Button>
+                        </Sheet.Content>
+                      </Sheet.Container>
+                      <Sheet.Backdrop />
+                    </Sheet>
+                  )}
+                  {!isLoggedIn && (
+                    <div className="flex items-center">
+                      <div>카드 등록하고<br />슬기로운 소비생활 시작하기</div>
+                      <div>카드 등록하기</div>
                     </div>
                   )}
                   <div className="font-semibold text-lg tracking-[-2%] mb-4 pl-5">추천 장소 키워드</div>
