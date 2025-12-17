@@ -6,6 +6,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Sheet } from "react-modal-sheet";
 import CardRegistration from "@/components/pages/CardRegistration";
+import Notifications from "@/components/pages/Notifications";
 import styles from "./page.module.css";
 
 const places = [
@@ -156,6 +157,7 @@ export default function Home() {
   const [selectedSpot, setSelectedSpot] = useState('')
   const [selectedCard, setSelectedCard] = useState('')
   const [isCardRegistrationVisible, setIsCardRegistrationVisible] = useState(false)
+  const [isNotificationsVisible, setIsNotificationsVisible] = useState(false)
   const ref = useRef(null);
   const snapTo = (i) => ref.current.snapTo(i);
 
@@ -188,9 +190,16 @@ export default function Home() {
             카드
           </div>
         </div>
-        <Link href="/notifications">
-          <Image src="/images/icons/notifications.png" width={24} height={24} alt="알림" className="absolute right-[18px] top-3.5 bottom-[22px]" />
-        </Link>
+        <Image
+          src="/images/icons/notifications.png"
+          width={24}
+          height={24}
+          alt="알림"
+          className="absolute right-[18px] top-3.5 bottom-[22px]"
+          onClick={() => {
+            setIsNotificationsVisible(true)
+          }}
+        />
       </div>
 
       <Sheet
@@ -471,6 +480,8 @@ export default function Home() {
       )}
 
       {isCardRegistrationVisible && <CardRegistration setIsVisible={setIsCardRegistrationVisible} />}
+
+      {isNotificationsVisible && <Notifications setIsVisible={setIsNotificationsVisible} />}
     </>
   )
 }

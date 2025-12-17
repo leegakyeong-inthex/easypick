@@ -23,11 +23,18 @@ const notifications = [
   },
 ]
 
-export default function Notifications() {
+export default function Notifications({ setIsVisible }) {
   return(
-    <div>
+    <div style={{ zIndex: 2 }} className="bg-white absolute w-full h-full">
       <div className="flex items-center pt-3.5 pb-2.5 px-[17px]">
-        <Image src="/images/icons/arrow-left.png" width={24} height={24} alt="뒤로가기" className="mr-3" />
+        <Image
+          src="/images/icons/arrow-left.png"
+          width={24}
+          height={24}
+          alt="뒤로가기"
+          className="mr-3"
+          onClick={() => setIsVisible(false)}
+        />
         <div className="text-xl font-bold">알림</div>
       </div>
       <div>
