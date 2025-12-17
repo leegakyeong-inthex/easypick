@@ -188,7 +188,7 @@ export default function Home() {
         </Link>
       </div>
 
-      {/* <Sheet
+      <Sheet
         // unstyled
         ref={ref}
         isOpen={isOpen}
@@ -429,8 +429,8 @@ export default function Home() {
             )}
           </Sheet.Content>
         </Sheet.Container>
-        // <Sheet.Backdrop style={{ zIndex: 500 }} />
-      </Sheet> */}
+        {/* <Sheet.Backdrop style={{ zIndex: 500 }} /> */}
+      </Sheet>
     </>
   )
 }
