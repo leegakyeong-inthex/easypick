@@ -36,7 +36,7 @@ export default function NavigationBar() {
   const [selectedTab, setSelectedTab] = useState('혜택 지도')
 
   return (
-    <div className="absolute z-50 bottom-0 w-full h-20 pt-2.5 px-[25px] bg-white" style={{ boxShadow: '0px 4px 10px 0px rgba(0, 0, 0, 0.08)' }}>
+    <div className="fixed z-2 bottom-0 w-full h-20 pt-2.5 px-[25px] bg-white" style={{ boxShadow: '0px 4px 10px 0px rgba(0, 0, 0, 0.08)' }}>
       <div className="flex items-center space-x-[30px]">
         {tabs.map((tab) => (
           <Link

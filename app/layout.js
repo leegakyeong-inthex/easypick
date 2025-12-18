@@ -1,5 +1,4 @@
 import localFont from "next/font/local";
-import NavigationBar from "@/components/NavigationBar";
 import "./globals.css";
 
 const pretendard = localFont({
@@ -21,7 +20,6 @@ export default function RootLayout({ children }) {
       <body className={pretendard.className}>
         <div className="h-screen relative">
           {children}
-          <NavigationBar />
         </div>
       </body>
     </html>
