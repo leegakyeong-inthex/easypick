@@ -204,29 +204,40 @@ export default function CardRegistration({ setIsVisible }) {
   return (
     <>
       <div style={{ zIndex: 2 }} className="bg-white absolute w-full h-full">
-        <div className="flex items-center">
-          <div onClick={() => setIsVisible(false)}>뒤로가기</div>
-          <div>내 카드 등록</div>
+        <div className="flex items-center pt-3.5 pb-2.5 px-[17px] mb-[18px]">
+          <Image
+            src="/images/icons/arrow-left.png"
+            width={24}
+            height={24}
+            alt="뒤로가기"
+            className="mr-3"
+            onClick={() => setIsVisible(false)}
+          />
+          <div className="text-xl font-bold">내 카드 등록</div>
         </div>
-        <div>
-          <div className="flex items-center">
-            <div>카드사</div>
-            <div>카드</div>
+        <div className="flex flex-col">
+          <div className="flex items-center border-b border-[#F4F4F4] font-semibold text-xs text-[#6D727A]">
+            <div className="w-[134px] pl-[18px] pb-3.5">카드사</div>
+            <div className="pl-[18px] pb-3.5">카드</div>
           </div>
-          <div className="flex">
-            <div>
+          <div className="flex flex-1">
+            <div className="border-r border-[#F4F4F4] w-[134px] pt-1.5 pr-1.5">
               {cards.map((card) => (
-                <div key={card.company}>{card.company}</div>
+                <div
+                  key={card.company}
+                  className={`h-[50px] flex items-center pl-5 font-medium text-sm rounded-tr-[10px] rounded-br-[10px] ${card.company === selectedCard ? 'bg-[#E2EEFF] text-[#0068FF]' : 'text-[#6D727A]'}`}
+                  onClick={() => setSelectedCard(card.company)}
+                >{card.company}</div>
               ))}
             </div>
-            <div>
+            <div className="flex flex-col py-1.5 px-2.5 space-y-1.5 flex-1 overflow-y-scroll h-full">
               {cards.find((card) => card.company === selectedCard).cards.map((card,i) => (
                 <div
                   key={card.name+i}
-                  className="flex items-center"
+                  className="flex items-center w-full h-[60px] font-medium text-sm"
                   onClick={() => setIsRegistrationOpen(true)}
                 >
-                  <Image src={card.image} width={22} height={36} alt="" />
+                  <Image src={card.image} width={30} height={44} alt="" className="mr-1.5" />
                   <div>{card.name}</div>
                 </div>
               ))}

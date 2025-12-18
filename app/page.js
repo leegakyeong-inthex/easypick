@@ -244,7 +244,7 @@ export default function Home() {
                       </div>
                     ))}
                   </div>
-                  <hr className="border border-[#F4F4F4] mb-5" />
+                  <hr className="border-t border-[#F4F4F4] mb-5" />
                   {isLoggedIn && places.find((p) => p.name === selectedPlace) && (
                     <div>
                       <div className="flex items-center space-x-3 mb-1 px-5">
@@ -287,9 +287,10 @@ export default function Home() {
                     </div>
                   )}
                   {!isLoggedIn && (
-                    <div className="flex items-center">
-                      <div>카드 등록하고<br />슬기로운 소비생활 시작하기</div>
+                    <div className="flex items-center justify-between px-5 pt-2 pb-7 mb-4 border-b border-[#F4F4F4]">
+                      <div className="font-semibold text-lg leading-[25px]">카드 등록하고<br />슬기로운 소비생활 시작하기</div>
                       <div
+                        className="bg-[#E3EEFF] rounded-full leading-none px-3 py-[9px] font-semibold text-[15px] text-[#0D58BB] h-9"
                         onClick={() => {
                           setIsCardRegistrationVisible(true)
                         }}
@@ -372,7 +373,7 @@ export default function Home() {
             ) : (
               <>
                 <div className="mb-20 overflow-x-hidden overflow-y-scroll">
-                  <div className="font-semibold text-lg tracking-[-2%] mb-4 pl-5">장소 맞춤 카드찾기</div>
+                  <div className="font-semibold text-lg tracking-[-2%] mb-4 pl-5">카드 맞춤 장소찾기</div>
                   <div className="flex items-center mx-5 mb-[11px]">
                     <div className="w-[55px] font-semibold shrink-0 text-sm mr-2.5">카드사</div>
                     <div className="flex overflow-x-scroll space-x-1.5">
@@ -471,11 +472,15 @@ export default function Home() {
           <Sheet.Container>
             <Sheet.Header />
             <Sheet.Content>
-              <div>로그인하고 내 소비패턴에 맞는 카드 혜택과 이벤트를 확인해보세요.</div>
-              <Button>로그인하고 확인하기</Button>
+              <div>
+                <div className="px-5 font-semibold text-lg leading-[25px] mb-8">로그인하고 내 소비패턴에 맞는<br />카드 혜택과 이벤트를 확인해보세요.</div>
+                <div className="px-[18px]">
+                  <Button>로그인하고 확인하기</Button>
+                </div>
+              </div>
             </Sheet.Content>
           </Sheet.Container>
-          <Sheet.Backdrop />
+          <Sheet.Backdrop onClick={() => setIsLoginSheetOpen(false)} />
         </Sheet>
       )}
 
