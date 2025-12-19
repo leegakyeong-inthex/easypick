@@ -2,12 +2,15 @@
 
 import { useState } from "react";
 import Image from "next/image";
+import { useRouter } from 'next/navigation'
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/components/ui/select";
 
 export default function SignUp() {
+  const router = useRouter()
+
   const [termsAgreedAll, setTermsAgreedAll] = useState(false);
   const [termsAgreed, setTermsAgreed] = useState({
     service: false,
@@ -33,7 +36,7 @@ export default function SignUp() {
 
   return (
     <div className="px-[18px] font-medium flex flex-col items-center min-h-screen pb-[30px]">
-      <div className="mt-4 mb-[29px] w-full">
+      <div className="mt-4 mb-[29px] w-full" onClick={() => router.back()}>
         <Image src="/images/icons/arrow-left.png" width={24} height={24} alt="뒤로가기" />
       </div>
       <div className="w-full mb-[34px] font-bold text-[26px] leading-9">회원가입에 필요한<br />정보를 입력해 주세요</div>
@@ -86,20 +89,18 @@ export default function SignUp() {
         </div>
       </div>
 
-      <div className="w-full mb-[30px]">
+      <div className="w-full mb-[145px]">
         <div
-          className={`w-full rounded-[12px] px-5 py-4 mb-5 flex items-center space-x-3 cursor-pointer ${
-            termsAgreedAll ? 'bg-[#2563EB]' : 'bg-[#F3F3F3]'
+          className={`w-full rounded-[12px] px-5 py-3.5 mb-2.5 flex items-center space-x-3 cursor-pointer ${
+            termsAgreedAll ? 'bg-[#0068FF]' : 'bg-[#F5F5F5]'
           }`}
           onClick={handleAgreedAll}
         >
-          <div className={`shrink-0 w-6 h-6 rounded-full flex items-center justify-center ${termsAgreedAll ? 'bg-white' : 'bg-[#E5E7EB]'}`}>
-            {termsAgreedAll && <Image src="/images/icons/check.png" width={16} height={16} alt="체크" />}
-          </div>
-          <span className={`font-semibold text-base ${termsAgreedAll ? 'text-white' : 'text-[#1F2937]'}`}>약관 전체 동의하기</span>
+          <Image src={termsAgreedAll ? "/images/icons/check-primary-checked.png" : "/images/icons/check-primary.png"} width={20} height={20} alt="체크" />
+          <span className={`font-semibold text-base ${termsAgreedAll ? 'text-white' : 'text-black'}`}>약관 전체 동의하기</span>
         </div>
 
-        <div className="space-y-3 mb-8">
+        <div>
           {[
             { key: 'service', label: '(필수) 서비스 이용 약관' },
             { key: 'privacy', label: '(필수) 개인정보 수집 및 이용' },
@@ -107,15 +108,13 @@ export default function SignUp() {
           ].map((term) => (
             <div
               key={term.key}
-              className="flex items-center justify-between px-4 py-3 bg-[#F9FAFB] rounded-[10px]"
+              className="flex items-center justify-between px-2.5 py-2.5 h-10 rounded-[10px]"
             >
               <div className="flex items-center space-x-3 flex-1 cursor-pointer" onClick={() => handleIndividualTerm(term.key as keyof typeof termsAgreed)}>
-                <div className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center border-2 border-[#D1D5DB]" style={{ borderColor: termsAgreed[term.key as keyof typeof termsAgreed] ? '#2563EB' : '#D1D5DB', backgroundColor: termsAgreed[term.key as keyof typeof termsAgreed] ? '#2563EB' : 'transparent' }}>
-                  {termsAgreed[term.key as keyof typeof termsAgreed] && <Image src="/images/icons/check.png" width={12} height={12} alt="체크" />}
-                </div>
-                <span className="text-[15px] text-[#374151]">{term.label}</span>
+                <Image src={termsAgreedAll ? "/images/icons/check-secondary-checked.png" : "/images/icons/check-secondary.png"} width={20} height={20} alt="체크" />
+                <span className="text-[15px] text-[#6D727A]">{term.label}</span>
               </div>
-              <button className="text-[#9CA3AF] text-[13px] underline hover:text-[#6B7280]">보기</button>
+              <button className="text-[#AAAAAA] text-sm underline">보기</button>
             </div>
           ))}
         </div>

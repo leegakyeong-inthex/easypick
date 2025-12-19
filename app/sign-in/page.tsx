@@ -121,7 +121,9 @@ export default function SignIn() {
           <Image src="/images/icons/naver.png" width="42" height="42" alt="네이버" />
           <Image src="/images/icons/apple.png" width="42" height="42" alt="애플" />
         </div>
-        <Button className="mb-6" variant="secondary">회원가입</Button>
+        <Link href="/sign-up" className="w-full">
+          <Button className="mb-6" variant="secondary">회원가입</Button>
+        </Link>
         <Link href="/">
           <div className="text-[15px] text-[#6D727A] underline mb-[45px]">둘러보기</div>
         </Link>
