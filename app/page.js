@@ -162,6 +162,9 @@ export default function Home() {
   const [selectedKeyword, setSelectedKeyword] = useState('')
   const [isKeywordSheetOpen, setIsKeywordSheetOpen] = useState(false)
   const [selectedKeywordSpot, setSelectedKeywordSpot] = useState('')
+  const [selectedBenefitSpot, setSelectedBenefitSpot] = useState(null)
+  const [selectedKeywordBenefit, setSelectedKeywordBenefit] = useState(null)
+  const [isBetterCardSheetOpen, setIsBetterCardSheetOpen] = useState(false)
   const ref = useRef(null);
   const snapTo = (i) => ref.current.snapTo(i);
 
@@ -456,9 +459,19 @@ export default function Home() {
                               <div className="text-base font-semibold">{benefit.benefit}</div>
                             </div>
                           </div>
-                          <div className="mx-[18px] bg-[#0B0D0F] flex items-center justify-center text-white py-3 rounded-[10px] h-10 mb-3">더 나은 혜택 카드 보기</div>
+                          <div
+                            className="mx-[18px] bg-[#0B0D0F] flex items-center justify-center text-white py-3 rounded-[10px] h-10 mb-3 cursor-pointer"
+                            onClick={() => setIsBetterCardSheetOpen(true)}
+                          >더 나은 혜택 카드 보기</div>
                           {benefit.spots.map((spot, i) => (
-                            <div key={spot.name+i} className="flex items-center mx-[18px] rounded-[13px] bg-[#F8F8F8] border border-[#F4F4F4] px-2 py-3.5 mb-[7px] last:mb-[30px]">
+                            <div
+                              key={spot.name+i}
+                              className="flex items-center mx-[18px] rounded-[13px] bg-[#F8F8F8] border border-[#F4F4F4] px-2 py-3.5 mb-[7px] last:mb-[30px] cursor-pointer"
+                              onClick={() => {
+                                setSelectedKeywordBenefit(benefit)
+                                setSelectedBenefitSpot(spot)
+                              }}
+                            >
                               <Image src={spot.image} width={34} height={34} alt="" />
                               <div className="flex-1 ml-[11px]">
                                 <div className="font-semibold text-[13px]">{spot.name}</div>
@@ -624,6 +637,201 @@ export default function Home() {
             setSelectedKeyword('')
             setSelectedKeywordSpot('')
           }} />
+        </Sheet>
+      )}
+
+      {selectedKeywordBenefit && (
+        <Sheet
+          isOpen={!!selectedKeywordBenefit}
+          onClose={() => setSelectedKeywordBenefit(null)}
+          snapPoints={[0, 200, 1]}
+          initialSnap={1}
+        >
+          <Sheet.Container>
+            <Sheet.Header />
+            <Sheet.Content>
+              {!selectedBenefitSpot ? (
+                <div className="mb-20 overflow-x-hidden overflow-y-scroll">
+                  <div className="px-[18px] flex items-center justify-between mb-4">
+                    <Image
+                      src="/images/icons/arrow-left.png"
+                      width={24}
+                      height={24}
+                      alt="뒤로가기"
+                      className="cursor-pointer"
+                      onClick={() => setSelectedKeywordBenefit(null)}
+                    />
+                    <div className="flex items-center space-x-[7px]">
+                      <div className="rounded-full bg-[#EEEEEE] p-1.5">
+                        <Image src="/images/icons/directions.png" width={20} height={20} alt="" />
+                      </div>
+                      <div className="rounded-full bg-[#EEEEEE] p-1.5">
+                        <Image src="/images/icons/call.png" width={20} height={20} alt="" />
+                      </div>
+                      <div className="rounded-full bg-[#EEEEEE] p-1.5">
+                        <Image src="/images/icons/bookmark.png" width={20} height={20} alt="" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="px-[18px] leading-none mb-4">
+                    <div className="text-xl font-semibold mb-1">{selectedKeywordSpot}</div>
+                    <div className="flex items-center space-x-1 font-medium text-[13px] mb-3">
+                      <div>{selectedKeywordBenefit.category}</div>
+                      <Image src="/images/icons/gray-dot.png" width={3} height={3} alt="" />
+                      <div>90m</div>
+                    </div>
+                    <div className="text-sm text-[#6D727A] mb-px">서울 광진구 아차산로 30길 26</div>
+                    <div className="flex items-center space-x-1.5 text-sm font-medium">
+                      <div>영업중</div>
+                      <Image src="/images/icons/gray-dot.png" width={3} height={3} alt="" />
+                      <div className="text-[#6D727A]">00:00 - 24:00</div>
+                    </div>
+                  </div>
+
+                  <div className="px-[18px] flex items-center space-x-2 overflow-x-scroll mb-4">
+                    {spotCards.map((card) => (
+                      <div key={card.company} className="w-[200px] h-[90px] bg-[#F7F8F8] flex items-center p-[7px] rounded-[10px] shrink-0">
+                        <Image src={card.image} width={49} height={78} alt={card.name} className="grow-0" />
+                        <div className="ml-3.5 font-medium">
+                          <div className="text-xs text-[#B2B2B2]">{card.company}</div>
+                          <div className="text-[13px] text-[#6D727A]">{card.name}</div>
+                          <div className="text-[15px] font-semibold">{card.benefit}</div>
+                        </div>
+                        <div className="bg-[#CCE1FF] px-[7px] py-1 text-[#0068FF] text-[10px] font-semibold rounded-[20px] self-start">MY</div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="px-[18px] flex items-center space-x-2 overflow-x-scroll mb-4">
+                    {photos.map((photo, i) => (
+                      <Image key={photo+i} src={photo} width={149} height={100} alt="" />
+                    ))}
+                  </div>
+
+                  <div className="divide-y divide-solid divide-[#F4F4F4]">
+                    {selectedKeywordBenefit.spots.map((spot, i) => (
+                      <div
+                        key={spot.name+i}
+                        className="flex items-center mx-[18px] rounded-[13px] bg-[#F8F8F8] border border-[#F4F4F4] px-2 py-3.5 mb-[7px] last:mb-[30px] cursor-pointer"
+                        onClick={() => setSelectedBenefitSpot(spot)}
+                      >
+                        <Image src={spot.image} width={34} height={34} alt="" />
+                        <div className="flex-1 ml-[11px]">
+                          <div className="font-semibold text-[13px]">{spot.name}</div>
+                          <div className="font-medium text-[13px] text-[#6D727A]">{spot.benefit}</div>
+                        </div>
+                        <div className="bg-white border border-[#EBEBEB] rounded-full px-2 py-1 font-medium text-[13px] text-[#5A5B64]">{spot.distance}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ) : (
+                <div className="mb-20 overflow-x-hidden overflow-y-scroll">
+                  <div className="px-[18px] flex items-center justify-between mb-4">
+                    <Image
+                      src="/images/icons/arrow-left.png"
+                      width={24}
+                      height={24}
+                      alt="뒤로가기"
+                      className="cursor-pointer"
+                      onClick={() => setSelectedBenefitSpot(null)}
+                    />
+                    <div className="flex items-center space-x-[7px]">
+                      <div className="rounded-full bg-[#EEEEEE] p-1.5">
+                        <Image src="/images/icons/directions.png" width={20} height={20} alt="" />
+                      </div>
+                      <div className="rounded-full bg-[#EEEEEE] p-1.5">
+                        <Image src="/images/icons/call.png" width={20} height={20} alt="" />
+                      </div>
+                      <div className="rounded-full bg-[#EEEEEE] p-1.5">
+                        <Image src="/images/icons/bookmark.png" width={20} height={20} alt="" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="px-[18px] leading-none mb-4">
+                    <div className="text-xl font-semibold mb-1">{selectedBenefitSpot.name}</div>
+                    <div className="flex items-center space-x-1 font-medium text-[13px] mb-3">
+                      <div>{selectedKeywordBenefit.category}</div>
+                      <Image src="/images/icons/gray-dot.png" width={3} height={3} alt="" />
+                      <div>{selectedBenefitSpot.distance}</div>
+                    </div>
+                    <div className="text-sm text-[#6D727A] mb-px">서울 광진구 아차산로 30길 26</div>
+                    <div className="flex items-center space-x-1.5 text-sm font-medium">
+                      <div>영업중</div>
+                      <Image src="/images/icons/gray-dot.png" width={3} height={3} alt="" />
+                      <div className="text-[#6D727A]">00:00 - 24:00</div>
+                    </div>
+                  </div>
+
+                  <div className="px-[18px] flex items-center space-x-2 overflow-x-scroll mb-4">
+                    {spotCards.map((card) => (
+                      <div key={card.company} className="w-[200px] h-[90px] bg-[#F7F8F8] flex items-center p-[7px] rounded-[10px] shrink-0">
+                        <Image src={card.image} width={49} height={78} alt={card.name} className="grow-0" />
+                        <div className="ml-3.5 font-medium">
+                          <div className="text-xs text-[#B2B2B2]">{card.company}</div>
+                          <div className="text-[13px] text-[#6D727A]">{card.name}</div>
+                          <div className="text-[15px] font-semibold">{card.benefit}</div>
+                        </div>
+                        <div className="bg-[#CCE1FF] px-[7px] py-1 text-[#0068FF] text-[10px] font-semibold rounded-[20px] self-start">MY</div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="px-[18px] flex items-center space-x-2 overflow-x-scroll mb-4">
+                    {photos.map((photo, i) => (
+                      <Image key={photo+i} src={photo} width={149} height={100} alt="" />
+                    ))}
+                  </div>
+                </div>
+              )}
+            </Sheet.Content>
+          </Sheet.Container>
+          <Sheet.Backdrop onClick={() => {
+            setSelectedKeywordBenefit(null)
+            setSelectedBenefitSpot(null)
+          }} />
+        </Sheet>
+      )}
+
+      {isBetterCardSheetOpen && (
+        <Sheet
+          isOpen={isBetterCardSheetOpen}
+          onClose={() => setIsBetterCardSheetOpen(false)}
+          snapPoints={[0, 200, 1]}
+          initialSnap={1}
+        >
+          <Sheet.Container>
+            <Sheet.Header />
+            <Sheet.Content>
+              <div className="mb-20 overflow-x-hidden overflow-y-scroll">
+                <div className="px-5 flex items-center justify-between mb-8">
+                  <div className="font-semibold text-lg leading-[25px]">더 나은 영화 혜택 카드</div>
+                  <Image
+                    src="/images/icons/close.png"
+                    width={24}
+                    height={24}
+                    alt="닫기"
+                    className="cursor-pointer"
+                    onClick={() => setIsBetterCardSheetOpen(false)}
+                  />
+                </div>
+                <div className="divide-y divide-solid divide-[#F4F4F4]">
+                  {ownedCards.map((card, i) => (
+                    <div key={card.name+i} className="flex items-center py-4 px-5">
+                      <Image src={card.image} width={54} height={86} alt={card.name} className="mr-5" />
+                      <div className="flex-1">
+                        <div className="font-medium text-[#6D727A] text-[13px] mb-1">{card.name}</div>
+                        <div className="font-semibold text-base">{card.benefit}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </Sheet.Content>
+          </Sheet.Container>
+          <Sheet.Backdrop onClick={() => setIsBetterCardSheetOpen(false)} />
         </Sheet>
       )}
 
