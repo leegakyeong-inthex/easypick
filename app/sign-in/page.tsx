@@ -10,7 +10,10 @@ export default function SignIn() {
     <div className="px-[18px] font-medium flex flex-col items-center h-screen">
       <div className="w-fit mt-[59px] mx-auto mb-7 font-bold text-[26px] leading-9 text-center">이지픽<br />카드 할인지도</div>
       <Input id="id" type="text" placeholder="아이디" className="mb-2.5" />
-      <Input id="password" type="password" placeholder="비밀번호 입력" className="mb-3.5" />
+      <div className="relative w-full">
+        <Input id="password" type="password" placeholder="비밀번호 입력" className="mb-3.5" />
+        <Image src="/images/icons/visibility.png" width="16" height="16" alt="비밀번호 숨기기" className="absolute right-[17px] top-[calc(50%-16px)] cursor-pointer" />
+      </div>
       <div className="flex items-center space-x-2 mb-5 w-full">
         <Checkbox id="remenber-me" />
         <Label htmlFor="remember-me" className="text-[#6D727A]">로그인 상태 유지</Label>
