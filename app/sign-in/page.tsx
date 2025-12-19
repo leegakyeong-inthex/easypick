@@ -14,7 +14,6 @@ export default function SignIn() {
   const [phoneNumber, setPhoneNumber] = useState("")
   const [verificationCode, setVerificationCode] = useState("")
   const [foundEmail, setFoundEmail] = useState("")
-  const [timer, setTimer] = useState(0)
 
   const [isFindPasswordSheetOpen, setIsFindPasswordSheetOpen] = useState(false)
   const [findPasswordStep, setFindPasswordStep] = useState(1)
@@ -28,7 +27,6 @@ export default function SignIn() {
     setPhoneNumber("")
     setVerificationCode("")
     setFoundEmail("")
-    setTimer(0)
   }
 
   const handleFindPasswordClick = () => {
@@ -42,7 +40,6 @@ export default function SignIn() {
   const handleSendVerification = () => {
     if (phoneNumber.trim()) {
       setFindIdStep(2)
-      setTimer(300) // 5분 타이머
     }
   }
 
@@ -142,42 +139,52 @@ export default function SignIn() {
           >
             {findIdStep === 1 && (
               <div className="px-5 py-6 h-full flex flex-col">
-                <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center mb-8">
                   <Image
                     src="/images/icons/arrow-left.png"
                     width={24}
                     height={24}
                     alt="닫기"
-                    className="cursor-pointer"
+                    className="cursor-pointer mr-3"
                     onClick={handleCloseFindId}
                   />
-                  <span className="text-lg font-bold">비밀번호 찾기</span>
+                  <span className="text-xl font-bold">아이디 찾기</span>
                   <div className="w-6"></div>
                 </div>
                 <div className="flex-1">
-                  <p className="text-base font-semibold leading-7 mb-8">가입 시 등록한 휴대폰 번호로<br />아이디와 유대폰 번호를 입력해주세요.</p>
+                  <p className="text-[26px] font-bold leading-9 mb-[34px]">가입 시 등록한 휴대폰 번호로<br />아이디를 찾을 수 있어요.</p>
                   <div className="mb-6">
-                    <label className="text-[13px] text-[#6D727A] mb-3 block font-semibold">아이디</label>
-                    <Input
-                      placeholder="아이디"
-                      value={phoneNumber}
-                      onChange={(e) => setPhoneNumber(e.target.value)}
-                      className="h-12"
-                    />
+                    <label className="text-sm mb-3 block font-medium">휴대폰 번호</label>
+                    <div className="flex">
+                      <Input
+                        placeholder="휴대폰 번호"
+                        value={phoneNumber}
+                        onChange={(e) => setPhoneNumber(e.target.value)}
+                        className="h-12"
+                      />
+                      <Button
+                        className={`flex items-center justify-center text-white w-[102px] ml-2 rounded-[10px] ${phoneNumber ? 'bg-black' : 'bg-[#C3C3C3]'}`}
+                      >인증 받기</Button>
+                    </div>
                   </div>
                   <div className="mb-8">
-                    <label className="text-[13px] text-[#6D727A] mb-3 block font-semibold">휴대폰 번호</label>
+                    <label className="text-sm mb-3 block font-medium">인증번호</label>
                     <Input
-                      placeholder="휴대폰 번호"
+                      placeholder="인증번호 6자리"
                       value={verificationCode}
-                      onChange={(e) => setVerificationCode(e.target.value)}
+                      onChange={(e) => setVerificationCode(e.target.value.slice(0, 6))}
+                      maxLength={6}
                       className="h-12"
                     />
                   </div>
                 </div>
                 <Button
                   className="w-full h-14 rounded-xl mb-6"
-                  onClick={handleSendVerification}
+                  onClick={() => {
+                    if (phoneNumber.trim() && verificationCode.trim()) {
+                      setFindIdStep(2)
+                    }
+                  }}
                   disabled={!phoneNumber.trim() || !verificationCode.trim()}
                 >
                   확인
@@ -187,50 +194,55 @@ export default function SignIn() {
 
             {findIdStep === 2 && (
               <div className="px-5 py-6 h-full flex flex-col">
-                <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center mb-8">
                   <Image
                     src="/images/icons/arrow-left.png"
                     width={24}
                     height={24}
                     alt="닫기"
-                    className="cursor-pointer"
+                    className="cursor-pointer mr-3"
                     onClick={handleCloseFindId}
                   />
-                  <span className="text-lg font-bold">비밀번호 찾기</span>
+                  <span className="text-xl font-bold">아이디 찾기</span>
                   <div className="w-6"></div>
                 </div>
                 <div className="flex-1">
-                  <p className="text-base font-semibold leading-7 mb-8">새로운 비밀번호를<br />입력해주세요</p>
+                  <p className="text-[26px] font-bold leading-9 mb-[34px]">가입 시 등록한 휴대폰 번호로<br />아이디를 찾을 수 있어요.</p>
                   <div className="mb-6">
-                    <label className="text-[13px] text-[#6D727A] mb-3 block font-semibold">새 비밀번호</label>
-                    <div className="relative">
+                    <label className="text-sm mb-3 block font-medium">휴대폰 번호</label>
+                    <div className="flex">
                       <Input
-                        placeholder="새 비밀번호"
-                        type="password"
+                        placeholder="휴대폰 번호"
                         value={phoneNumber}
                         onChange={(e) => setPhoneNumber(e.target.value)}
                         className="h-12"
                       />
-                      <Image src="/images/icons/visibility.png" width="16" height="16" alt="보기" className="absolute right-4 top-1/2 transform -translate-y-1/2 cursor-pointer" />
+                      <Button
+                        className={`flex items-center justify-center text-white w-[102px] ml-2 rounded-[10px] ${phoneNumber ? 'bg-black' : 'bg-[#C3C3C3]'}`}
+                      >재전송</Button>
                     </div>
                   </div>
                   <div className="mb-8">
-                    <label className="text-[13px] text-[#6D727A] mb-3 block font-semibold">새 비밀번호 확인</label>
-                    <div className="relative">
+                    <label className="text-sm mb-3 block font-medium">인증번호</label>
+                    <div className="w-full relative">
                       <Input
-                        placeholder="새 비밀번호 확인"
-                        type="password"
+                        placeholder="인증번호 6자리"
                         value={verificationCode}
-                        onChange={(e) => setVerificationCode(e.target.value)}
+                        onChange={(e) => setVerificationCode(e.target.value.slice(0, 6))}
+                        maxLength={6}
                         className="h-12"
                       />
-                      <Image src="/images/icons/visibility.png" width="16" height="16" alt="보기" className="absolute right-4 top-1/2 transform -translate-y-1/2 cursor-pointer" />
+                      <div className="absolute font-medium text-sm text-[#0068FF] right-4 top-3.5">04:40</div>
                     </div>
                   </div>
                 </div>
                 <Button
                   className="w-full h-14 rounded-xl mb-6"
-                  onClick={handleVerificationSubmit}
+                  onClick={() => {
+                    if (phoneNumber.trim() && verificationCode.trim()) {
+                      setFindIdStep(3)
+                    }
+                  }}
                   disabled={!phoneNumber.trim() || !verificationCode.trim()}
                 >
                   확인
@@ -240,38 +252,75 @@ export default function SignIn() {
 
             {findIdStep === 3 && (
               <div className="px-5 py-6 h-full flex flex-col">
-                <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center mb-8">
                   <Image
                     src="/images/icons/arrow-left.png"
                     width={24}
                     height={24}
                     alt="닫기"
-                    className="cursor-pointer"
+                    className="cursor-pointer mr-3"
                     onClick={handleCloseFindId}
                   />
-                  <span className="text-lg font-bold"></span>
+                  <span className="text-xl font-bold">아이디 찾기</span>
                   <div className="w-6"></div>
                 </div>
-                <div className="flex-1 flex flex-col items-center justify-center">
-                  <div className="mb-6">
-                    <Image
-                      src="/images/icons/user-check.png"
-                      width={80}
-                      height={80}
-                      alt="완료"
-                    />
+                <div className="flex-1">
+                  <p className="text-[26px] font-bold leading-9 mb-[34px]">휴대폰 번호 정보와<br />일치하는 아이디입니다.</p>
+                  <div className="mb-8">
+                    <div className="px-4 py-5 bg-[#F3F3F3] rounded-lg flex items-center justify-center h-[72px]">
+                      <p className="text-lg font-semibold">{foundEmail}</p>
+                    </div>
                   </div>
-                  <div className="text-center">
-                    <p className="text-lg font-semibold mb-3">비밀번호가 변경되었습니다.</p>
-                    <p className="text-[15px] text-[#6D727A] leading-6">새로운 비밀번호로 로그인 후<br />서비스를 이용해주세요.</p>
+                </div>
+                <div className="flex gap-3 mb-6">
+                  <Button
+                    variant="secondary"
+                    className="flex-1 h-14 rounded-xl font-semibold"
+                    onClick={handleCloseFindId}
+                  >
+                    로그인 하기
+                  </Button>
+                  <Button
+                    className="flex-1 h-14 rounded-xl font-semibold"
+                    // onClick={() => setFindIdStep(4)}
+                    onClick={handleFindPasswordClick}
+                  >
+                    비밀번호 찾기
+                  </Button>
+                </div>
+              </div>
+            )}
+
+            {findIdStep === 4 && (
+              <div className="px-5 py-6 h-full flex flex-col">
+                <div className="flex items-center mb-8">
+                  <Image
+                    src="/images/icons/arrow-left.png"
+                    width={24}
+                    height={24}
+                    alt="닫기"
+                    className="cursor-pointer mr-3"
+                    onClick={handleCloseFindId}
+                  />
+                  <span className="text-xl font-bold">아이디 찾기</span>
+                  <div className="w-6"></div>
+                </div>
+                <div className="flex-1">
+                  <p className="text-[26px] font-bold leading-9 mb-[34px]">휴대폰 번호 정보와<br />일치하는 아이디입니다.</p>
+                  <div className="mb-8">
+                    <div className="px-4 py-5 bg-[#F3F3F3] rounded-lg">
+                      <p className="text-[15px] text-[#6D727A] mb-2 font-medium">아이디</p>
+                      <p className="text-lg font-semibold">{foundEmail}</p>
+                    </div>
                   </div>
                 </div>
                 <Button
-                  className="w-full h-14 rounded-xl mb-6"
+                  className="w-full h-14 rounded-xl mb-6 font-semibold"
                   onClick={handleCloseFindId}
                 >
-                  로그인 하기
+                  로그인하기
                 </Button>
+                <p className="text-center text-[13px] text-[#9CA3AF] cursor-pointer hover:underline">비밀번호 찾기</p>
               </div>
             )}
           </div>
@@ -291,7 +340,7 @@ export default function SignIn() {
           >
             {findPasswordStep === 1 && (
               <div className="px-5 py-6 h-full flex flex-col">
-                <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center mb-8">
                   <Image
                     src="/images/icons/arrow-left.png"
                     width={24}
@@ -300,13 +349,13 @@ export default function SignIn() {
                     className="cursor-pointer"
                     onClick={handleCloseFindPassword}
                   />
-                  <span className="text-lg font-bold">비밀번호 찾기</span>
+                  <span className="text-xl font-bold ml-3">비밀번호 찾기</span>
                   <div className="w-6"></div>
                 </div>
                 <div className="flex-1">
-                  <p className="text-base font-semibold leading-7 mb-8">가입 시 등록한 휴대폰 번호로<br />아이디와 유대폰 번호를 입력해주세요.</p>
+                  <p className="text-[26px] font-bold leading-9 mb-8">가입 시 등록하신 아이디와<br />휴대폰 번호를 입력해주세요.</p>
                   <div className="mb-6">
-                    <label className="text-[13px] text-[#6D727A] mb-3 block font-semibold">아이디</label>
+                    <label className="text-sm font-medium mb-3 block">아이디</label>
                     <Input
                       placeholder="아이디"
                       value={passwordPhoneNumber}
@@ -314,19 +363,34 @@ export default function SignIn() {
                       className="h-12"
                     />
                   </div>
-                  <div className="mb-8">
-                    <label className="text-[13px] text-[#6D727A] mb-3 block font-semibold">휴대폰 번호</label>
+                  <div className="flex">
                     <Input
                       placeholder="휴대폰 번호"
                       value={passwordVerificationCode}
                       onChange={(e) => setPasswordVerificationCode(e.target.value)}
                       className="h-12"
                     />
+                    <Button
+                      className={`flex items-center justify-center text-white w-[102px] ml-2 rounded-[10px] ${passwordVerificationCode ? 'bg-black' : 'bg-[#C3C3C3]'}`}
+                    >인증 받기</Button>
+                  </div>
+                  <div className="mb-8">
+                    <label className="text-sm font-medium mb-3 block">인증번호</label>
+                    <Input
+                      placeholder="인증번호 6자리"
+                      // value={passwordVerificationCode}
+                      // onChange={(e) => setPasswordVerificationCode(e.target.value)}
+                      className="h-12"
+                    />
                   </div>
                 </div>
                 <Button
-                  className="w-full h-14 rounded-xl mb-6"
-                  onClick={handleSendPasswordVerification}
+                  className="w-full h-14 rounded-xl mb-6 font-semibold"
+                  onClick={() => {
+                    if (passwordPhoneNumber.trim() && passwordVerificationCode.trim()) {
+                      setFindPasswordStep(2)
+                    }
+                  }}
                   disabled={!passwordPhoneNumber.trim() || !passwordVerificationCode.trim()}
                 >
                   확인
@@ -336,7 +400,7 @@ export default function SignIn() {
 
             {findPasswordStep === 2 && (
               <div className="px-5 py-6 h-full flex flex-col">
-                <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center mb-8">
                   <Image
                     src="/images/icons/arrow-left.png"
                     width={24}
@@ -345,13 +409,13 @@ export default function SignIn() {
                     className="cursor-pointer"
                     onClick={handleCloseFindPassword}
                   />
-                  <span className="text-lg font-bold">비밀번호 찾기</span>
+                  <span className="text-xl font-bold ml-3">비밀번호 찾기</span>
                   <div className="w-6"></div>
                 </div>
                 <div className="flex-1">
-                  <p className="text-base font-semibold leading-7 mb-8">새로운 비밀번호를<br />입력해주세요</p>
-                  <div className="mb-6">
-                    <label className="text-[13px] text-[#6D727A] mb-3 block font-semibold">새 비밀번호</label>
+                  <p className="text-[26px] font-bold leading-9 mb-8">새로운 비밀번호를<br />입력해주세요</p>
+                  <div className="mb-2">
+                    <label className="text-sm font-medium mb-3 block">새 비밀번호</label>
                     <div className="relative">
                       <Input
                         placeholder="새 비밀번호"
@@ -364,7 +428,7 @@ export default function SignIn() {
                     </div>
                   </div>
                   <div className="mb-8">
-                    <label className="text-[13px] text-[#6D727A] mb-3 block font-semibold">새 비밀번호 확인</label>
+                    <label className="text-[13px] text-[#6D727A] mb-3 font-semibold hidden">새 비밀번호 확인</label>
                     <div className="relative">
                       <Input
                         placeholder="새 비밀번호 확인"
@@ -378,8 +442,8 @@ export default function SignIn() {
                   </div>
                 </div>
                 <Button
-                  className="w-full h-14 rounded-xl mb-6"
-                  onClick={handlePasswordVerificationSubmit}
+                  className="w-full h-14 rounded-xl mb-6 font-semibold"
+                  onClick={() => setFindPasswordStep(3)}
                   disabled={!passwordPhoneNumber.trim() || !passwordVerificationCode.trim()}
                 >
                   확인
@@ -390,37 +454,30 @@ export default function SignIn() {
             {findPasswordStep === 3 && (
               <div className="px-5 py-6 h-full flex flex-col">
                 <div className="flex items-center justify-between mb-8">
-                  <Image
-                    src="/images/icons/arrow-left.png"
-                    width={24}
-                    height={24}
-                    alt="닫기"
-                    className="cursor-pointer"
-                    onClick={handleCloseFindPassword}
-                  />
+                  <div className="w-6"></div>
                   <span className="text-lg font-bold"></span>
                   <div className="w-6"></div>
                 </div>
                 <div className="flex-1 flex flex-col items-center justify-center">
-                  <div className="mb-6">
+                  <div className="mb-5">
                     <Image
-                      src="/images/icons/user-check.png"
-                      width={80}
-                      height={80}
+                      src="/images/icons/passkey.png"
+                      width={55}
+                      height={55}
                       alt="완료"
                     />
                   </div>
                   <div className="text-center">
-                    <p className="text-lg font-semibold mb-3">비밀번호가 변경되었습니다.</p>
-                    <p className="text-[15px] text-[#6D727A] leading-6">새로운 비밀번호로 로그인 후<br />서비스를 이용해주세요.</p>
+                    <p className="text-[26px] leading-9 font-bold mb-2.5">비밀번호가 변경되었습니다.</p>
+                    <p className="font-medium text-sm text-[#6D727A] leading-none mb-10">새로운 비밀번호로 로그인 후 서비스를 이용해주세요.</p>
                   </div>
+                  <Button
+                    className="w-[153px] px-10 py-4 rounded-[10px] font-medium"
+                    onClick={handleCloseFindPassword}
+                  >
+                    로그인 하기
+                  </Button>
                 </div>
-                <Button
-                  className="w-full h-14 rounded-xl mb-6"
-                  onClick={handleCloseFindPassword}
-                >
-                  로그인 하기
-                </Button>
               </div>
             )}
           </div>
