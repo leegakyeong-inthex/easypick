@@ -5,7 +5,7 @@ import { Sheet } from "react-modal-sheet";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
 
-const cards = [
+const initialCards = [
   {
     company: 'KB 국민카드',
     cards: [
@@ -234,9 +234,11 @@ const cards = [
 ]
 
 export default function CardRegistration({ setIsVisible }) {
+  const [cards, setCards] = useState(initialCards)
   const [selectedCard, setSelectedCard] = useState('KB 국민카드')
   const [isOpen, setIsOpen] = useState(false)
   const [isRegistrationOpen, setIsRegistrationOpen] = useState(false)
+  const [currentRegistrationCard, setCurrentRegistrationCard] = useState(null)
   const [company, setCompany] = useState('')
   const [cardName, setCardName] = useState('')
   const [isInputsComplete, setIsInputsComplete] = useState(false)
@@ -251,6 +253,57 @@ export default function CardRegistration({ setIsVisible }) {
     const value = e.target.value
     setCardName(value)
     setIsInputsComplete(company.trim() !== '' && value.trim() !== '')
+  }
+
+  const handleCardClick = (companyName, cardIndex) => {
+    setCurrentRegistrationCard({ company: companyName, index: cardIndex })
+    setIsRegistrationOpen(true)
+  }
+
+  const handleRegistrationComplete = () => {
+    if (currentRegistrationCard) {
+      setCards((prevCards) =>
+        prevCards.map((company) =>
+          company.company === currentRegistrationCard.company
+            ? {
+                ...company,
+                cards: company.cards.map((card, idx) =>
+                  idx === currentRegistrationCard.index ? { ...card, selected: true } : card
+                ),
+              }
+            : company
+        )
+      )
+      setIsRegistrationOpen(false)
+      setCurrentRegistrationCard(null)
+    }
+  }
+
+  const getSelectedCards = () => {
+    const selected = []
+    cards.forEach((company) => {
+      company.cards.forEach((card) => {
+        if (card.selected) {
+          selected.push({ name: card.name, company: company.company })
+        }
+      })
+    })
+    return selected
+  }
+
+  const handleRemoveCard = (cardName, companyName) => {
+    setCards((prevCards) =>
+      prevCards.map((company) =>
+        company.company === companyName
+          ? {
+              ...company,
+              cards: company.cards.map((card) =>
+                card.name === cardName ? { ...card, selected: false } : card
+              ),
+            }
+          : company
+      )
+    )
   }
 
   return (
@@ -286,8 +339,8 @@ export default function CardRegistration({ setIsVisible }) {
               {cards.find((card) => card.company === selectedCard).cards.map((card,i) => (
                 <div
                   key={card.name+i}
-                  className={`flex items-center w-full min-h-[60px] font-medium text-sm rounded-[10px] px-[13px] ${card.selected ? 'bg-[#0B0D0F] text-white' : ''}`}
-                  onClick={() => setIsRegistrationOpen(true)}
+                  className={`flex items-center w-full min-h-[60px] font-medium text-sm rounded-[10px] px-[13px] cursor-pointer ${card.selected ? 'bg-[#0B0D0F] text-white' : ''}`}
+                  onClick={() => handleCardClick(selectedCard, i)}
                 >
                   <Image src={card.image} width={26} height={40} alt="" className="mr-1.5" />
                   <div>{card.name}</div>
@@ -295,10 +348,37 @@ export default function CardRegistration({ setIsVisible }) {
               ))}
             </div>
           </div>
-          <div className="pt-2.5 px-[18px] h-[130px] flex flex-col items-center" style={{ boxShadow: '0px -4px 10px 0px rgba(0, 0, 0, 0.04)' }}>
-            <Button>확인</Button>
+          <div className="px-[18px] py-3 flex flex-col" style={{ boxShadow: '0px -4px 10px 0px rgba(0, 0, 0, 0.04)' }}>
+            {getSelectedCards().length > 0 && (
+              <>
+                <div className="font-semibold text-sm text-[#6D727A] mb-3">
+                  선택한 카드 <span className="text-[#0B0D0F]">{getSelectedCards().length}</span>
+                </div>
+                <div className="max-h-[120px] overflow-y-auto mb-3">
+                  <div className="grid grid-cols-2 gap-2">
+                    {getSelectedCards().map((card, idx) => (
+                      <div
+                        key={idx}
+                        className="flex items-center justify-between bg-[#F3F3F3] rounded-full px-3 py-2 text-sm font-medium text-[#0B0D0F]"
+                      >
+                        <span className="truncate">{card.name}</span>
+                        <Image
+                          src="/images/icons/x.png"
+                          width={14}
+                          height={14}
+                          alt="제거"
+                          className="ml-2 text-[#6D727A] font-bold text-lg shrink-0 cursor-pointer"
+                          onClick={() => handleRemoveCard(card.name, card.company)}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </>
+            )}
+            <Button className="w-full mb-2">확인</Button>
             <div
-              className="underline mt-[19px] font-semibold text-sm text-[#6D727A]"
+              className="underline font-semibold text-sm text-[#6D727A] text-center cursor-pointer"
               onClick={() => setIsOpen(true)}
             >찾는 카드가 없나요?</div>
           </div>
@@ -320,11 +400,11 @@ export default function CardRegistration({ setIsVisible }) {
               <div className="text-sm text-[#6D727A] mb-6">카드 정보를 남겨주시면 빠르게 추가해드릴게요.</div>
               <div className="relative w-full">
                 <Label htmlFor="company" className="font-semibold text-sm text-[#686B70] absolute left-[18px] top-3.5">카드사</Label>
-                <Input id="company" value={company} onChange={handleCompanyChange} className="bg-[#F3F3F3] mb-[13px] indent-[86%]" placeholder="카드사" />
+                <Input id="company" value={company} onChange={handleCompanyChange} className="bg-[#F3F3F3] mb-[13px] text-right" placeholder="카드사" />
               </div>
               <div className="relative w-full">
                 <Label htmlFor="cardName" className="font-semibold text-sm text-[#686B70] absolute left-[18px] top-3.5">카드 이름</Label>
-                <Input id="cardName" value={cardName} onChange={handleCardNameChange} className="bg-[#F3F3F3] mb-[25px] indent-[81%]" placeholder="카드 이름" />
+                <Input id="cardName" value={cardName} onChange={handleCardNameChange} className="bg-[#F3F3F3] mb-[25px] text-right" placeholder="카드 이름" />
               </div>
               <Button className={`w-full ${isInputsComplete ? 'bg-[#0068FF]' : 'bg-[#C3C3C3]'}`}>요청하기</Button>
             </div>
@@ -344,14 +424,24 @@ export default function CardRegistration({ setIsVisible }) {
           <Sheet.Header />
           <Sheet.Content>
             <div className="flex flex-col items-center mt-1.5 px-[18px]">
-              <div className="font-semibold text-[13px] text-[#0068FF] mb-1">삼성카드</div>
-              <div className="font-semibold text-xl mb-5">모니모 카드</div>
+              {currentRegistrationCard && (
+                <>
+                  <div className="font-semibold text-[13px] text-[#0068FF] mb-1">
+                    {currentRegistrationCard.company}
+                  </div>
+                  <div className="font-semibold text-xl mb-5">
+                    {cards
+                      .find((c) => c.company === currentRegistrationCard.company)
+                      ?.cards[currentRegistrationCard.index]?.name || '카드'}
+                  </div>
+                </>
+              )}
               <Image src="/images/card-3.png" width={140} height={87} alt="" className="rotate-90 -mt-12 -mb-5" />
-              <div className="flex items-center w-full">
-                <label className="font-semibold text-sm text-[#686B70] ml-[18px] absolute">유효기간</label>
-                <Input className="bg-[#F3F3F3] text-right w-full h-[62px] mb-6" placeholder="00 / 00" />
+              <div className="relative w-full">
+                <label className="font-semibold text-sm text-[#686B70] absolute left-[18px] top-5">유효기간</label>
+                <Input className="bg-[#F3F3F3] text-right mb-6 h-[62px]" placeholder="00 / 00" />
               </div>
-              <Button className="mb-6">완료</Button>
+              <Button className="mb-6" onClick={handleRegistrationComplete}>완료</Button>
             </div>
           </Sheet.Content>
         </Sheet.Container>
