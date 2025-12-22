@@ -3,6 +3,7 @@ import { useState } from "react"
 import { Button } from "../ui/button"
 import { Sheet } from "react-modal-sheet";
 import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 
 const cards = [
   {
@@ -236,6 +237,21 @@ export default function CardRegistration({ setIsVisible }) {
   const [selectedCard, setSelectedCard] = useState('KB 국민카드')
   const [isOpen, setIsOpen] = useState(false)
   const [isRegistrationOpen, setIsRegistrationOpen] = useState(false)
+  const [company, setCompany] = useState('')
+  const [cardName, setCardName] = useState('')
+  const [isInputsComplete, setIsInputsComplete] = useState(false)
+
+  const handleCompanyChange = (e) => {
+    const value = e.target.value
+    setCompany(value)
+    setIsInputsComplete(value.trim() !== '' && cardName.trim() !== '')
+  }
+
+  const handleCardNameChange = (e) => {
+    const value = e.target.value
+    setCardName(value)
+    setIsInputsComplete(company.trim() !== '' && value.trim() !== '')
+  }
 
   return (
     <>
@@ -292,19 +308,25 @@ export default function CardRegistration({ setIsVisible }) {
       <Sheet
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
-        snapPoints={[0, 200, 1]}
+        snapPoints={[0, 360, 1]}
         // detent="content"
         initialSnap={1}
       >
         <Sheet.Container>
           <Sheet.Header />
           <Sheet.Content>
-            <div>
-              <div>카드 추가 요청</div>
-              <div>카드 정보를 남겨주시면 빠르게 추가해드릴게요.</div>
-              <Input placeholder="카드사 입력" />
-              <Input placeholder="카드 이름 입력" />
-              <Button>요청하기</Button>
+            <div className="px-[18px] pb-6">
+              <div className="font-bold text-lg mb-1.5">카드 추가 요청</div>
+              <div className="text-sm text-[#6D727A] mb-6">카드 정보를 남겨주시면 빠르게 추가해드릴게요.</div>
+              <div className="relative w-full">
+                <Label htmlFor="company" className="font-semibold text-sm text-[#686B70] absolute left-[18px] top-3.5">카드사</Label>
+                <Input id="company" value={company} onChange={handleCompanyChange} className="bg-[#F3F3F3] mb-[13px] indent-[86%]" placeholder="카드사" />
+              </div>
+              <div className="relative w-full">
+                <Label htmlFor="cardName" className="font-semibold text-sm text-[#686B70] absolute left-[18px] top-3.5">카드 이름</Label>
+                <Input id="cardName" value={cardName} onChange={handleCardNameChange} className="bg-[#F3F3F3] mb-[25px] indent-[81%]" placeholder="카드 이름" />
+              </div>
+              <Button className={`w-full ${isInputsComplete ? 'bg-[#0068FF]' : 'bg-[#C3C3C3]'}`}>요청하기</Button>
             </div>
           </Sheet.Content>
         </Sheet.Container>

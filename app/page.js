@@ -150,7 +150,7 @@ const cardBenefits = [
 ]
 
 export default function Home() {
-  const [isLoggedIn, setIsLoggedIn] = useState(true)
+  const [isLoggedIn, setIsLoggedIn] = useState(false)
   const [selectedBenefit, setselectedBenefit] = useState('place') // place or card
   const [isOpen, setIsOpen] = useState(false)
   const [isLoginSheetOpen, setIsLoginSheetOpen] = useState(false)
